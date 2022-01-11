@@ -1,0 +1,13 @@
+{% extends 'gabarit.html' %}
+
+{% block title %}
+<title>Moneyes</title>
+{% endblock %}
+{% block body %}
+        {% if user.is_authenticated %}
+                <h1>Hello {{user.get_username}}</h1>
+        {% else %}
+                <h1>Welcome</h1>
+        {% endif %}
+{% endblock %}
+
