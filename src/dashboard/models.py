@@ -28,6 +28,7 @@ class Portfolio(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False, null=False)
 
+
 class Transaction(models.Model):
     transaction_id = models.AutoField(primary_key=True)
     date = models.DateField(blank=False, null=False, auto_now=True)
@@ -35,4 +36,4 @@ class Transaction(models.Model):
     crypto = models.ForeignKey(Crypto, on_delete=models.CASCADE, null=False, blank=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=False, blank=False)
     portfolio = models.ForeignKey(Portfolio, on_delete=models.SET_NULL, null=True)
-    #Auto this user
+    # Auto this user
