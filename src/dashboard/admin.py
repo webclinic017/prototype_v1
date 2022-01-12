@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Crypto, Portfolio, Holding, Transaction
+from .models import Crypto, Portfolio, Transaction, Account, Balance
 
 
 @admin.register(Crypto)
@@ -21,12 +21,21 @@ class PortfolioAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(Holding)
-class HoldingAdmin(admin.ModelAdmin):
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
     list_display = (
-        "holding_id",
+        "acc_id",
         "user",
     )
+
+
+@admin.register(Balance)
+class BalanceAdmin(admin.ModelAdmin):
+    list_display = (
+        "value",
+        "account"
+    )
+
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):

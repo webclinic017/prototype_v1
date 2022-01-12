@@ -6,11 +6,11 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
-from dashboard.models import Portfolio, Holding
+from dashboard.models import Portfolio, Account
 
 
 class DashboardHomeList(ListView):
-    model = Holding
+    model = Portfolio
     template_name = "dashboard/portfolio_list.html"
     context_object_name = "portfolio"
 
@@ -18,5 +18,10 @@ class DashboardHomeList(ListView):
 class DashboardAddCrypto(CreateView):
     model = Portfolio
     template_name = "dashboard/portfolio_create.html"
-    fields = ['crypto', 'quantity']
+    fields = ['name', 'type']
     success_url = reverse_lazy('dashboard-home')
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            form.instance.user = self.request.user
+        return super().form_valid(form)
