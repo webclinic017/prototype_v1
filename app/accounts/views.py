@@ -1,8 +1,10 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from accounts.forms import UserRegistrationForm
+
 
 def signup(request):
     if request.method == "POST":
@@ -13,4 +15,4 @@ def signup(request):
     else:
         form = UserRegistrationForm()
 
-    return render(request, "accounts/signup.html", context={"form": form})
+    return render(request, "registration/login.html", context={"form": form})
