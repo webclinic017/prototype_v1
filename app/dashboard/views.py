@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 
 # Create your views here.
@@ -7,6 +7,14 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
 from dashboard.models import Portfolio, Account
+
+
+def add(request):
+    requestContent = request.GET
+    code = requestContent.__getitem__("code")
+    connection_id = requestContent.__getitem__("connection_id")
+    return HttpResponse(connection_id)
+
 
 
 class DashboardHomeList(ListView):
