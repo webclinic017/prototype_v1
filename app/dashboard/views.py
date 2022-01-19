@@ -1,3 +1,4 @@
+import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
@@ -10,11 +11,14 @@ from dashboard.models import Portfolio, Account
 
 
 def add(request):
-    requestContent = request.GET
-    code = requestContent.__getitem__("code")
-    connection_id = requestContent.__getitem__("connection_id")
-    return HttpResponse(connection_id)
+    request_content = request.GET
+    code = request_content.__getitem__("code")
+    connection_id = request_content.__getitem__("connection_id")
 
+    data = {"client_id": code, "client_secret": connection_id}
+    url = "https://moneyes-prototypev1-sandbox.biapi.pro/2.0/auth/init"
+    response = requests.post(url, data)
+    return HttpResponse(response)
 
 
 class DashboardHomeList(ListView):
