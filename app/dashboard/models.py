@@ -10,92 +10,178 @@ from requests.auth import AuthBase
 
 from accounts.models import CustomUser
 
+TYPES = [
+    ("crypto", "Crypto currency"),
+    ("stock", "Stock asset")
+]
+
 
 class Account(models.Model):
-    acc_id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, blank=False, null=False, unique=True)
+    """
+        Account Class to display actual total
+        balance for a user
+    """
 
-    def __str__(self):
-        return f"Account_{self.user.id}"
-
-
-class Balance(models.Model):
-    value = MoneyField(
-        decimal_places=2,
-        default=0,
-        default_currency='USD',
-        max_digits=11,
+    id = models.AutoField(
+        primary_key=True,
     )
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = "Balance"
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+        unique=True,
+    )
+    created = models.DateTimeField(
+        blank=True,
+    )
+    updated = models.DateTimeField(
+        blank=True,
+    )
+    balance = models.FloatField(
+        verbose_name="Current balance",
+    )
 
     def __str__(self):
-        return str(self.value)
+        return f"Account_{self.user}"
 
-    def save(self, *args, **kwargs):
+    def update_holding(self):
+        # TODO : This function to update actual user holdings
         pass
 
-        super().save(*args, **kwargs)
 
-
-class Crypto(models.Model):
-    crypto_id = models.CharField(max_length=5, primary_key=True)
-    price = MoneyField(
-        decimal_places=2,
-        default=0,
-        default_currency='USD',
-        max_digits=11,
+class Currency(models.Model):
+    id = models.CharField(
+        max_length=5,
+        primary_key=True,
     )
-    name = models.CharField(max_length=20, blank=False)
-    last_update = models.DateField(blank=True, null=True)
+    crypto = models.BooleanField(
+        default=True,
+    )
+    price = models.FloatField(
+        verbose_name="Current price",
+    )
+    name = models.CharField(
+        max_length=20,
+        blank=False
+    )
+    created = models.DateTimeField(
+        blank=True,
+    )
+    updated = models.DateTimeField(
+        blank=True,
+    )
+    type = models.CharField(
+        max_length=25,
+        choices=TYPES
+    )
+
 
     def __str__(self):
         return f"{self.name}"
 
 
-class Portfolio(models.Model):
-    CRYPTO = "crypto"
-    TYPES = [
-        (CRYPTO, "Crypto"),
-    ]
-
-    portfolio_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False, null=False)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
-    type = models.CharField(max_length=25, blank=True, choices=TYPES, unique=True)
-    total = MoneyField(
-        decimal_places=2,
-        default=0,
-        default_currency='USD',
-        max_digits=11,
+class Holding(models.Model):
+    id = models.AutoField(
+        primary_key=True,
     )
-    last_update = models.DateField(blank=True, null=True, default=datetime.now)
+    currency = models.ForeignKey(
+        Currency,
+        on_delete=models.PROTECT
+    )
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+        unique=True,
+    )
+    quantity = models.FloatField(
+        verbose_name=f"Quantity of {currency.name}"
+    )
+    created = models.DateTimeField(
+        blank=True,
+    )
+    updated = models.DateTimeField(
+        blank=True,
+    )
 
     def __str__(self):
-        return f"Portfolio_{self.name} de {self.user}"
+        return f"{self.user.name} Holdings"
 
-    def save(self, *args, **kwargs):
-        transactions = Transaction.objects.filter(user=self.user)
-        totalTransactions = 0
-        for transaction in transactions:
-            totalTransactions = totalTransactions + (transaction.quantity * transaction.crypto.price)
-        self.total = totalTransactions
-        self.account = Account.objects.filter(user=self.user).first()
-        super().save(*args, **kwargs)
+    def add_transaction(self):
+        # TODO : Add new transaction to update holding
+        pass
 
 
 class Transaction(models.Model):
-    transaction_id = models.AutoField(primary_key=True)
-    date = models.DateField(blank=False, null=False, auto_now=True)
-    quantity = models.DecimalField(max_digits=6, decimal_places=2)
-    crypto = models.ForeignKey(Crypto, on_delete=models.CASCADE, null=False, blank=False)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=False, blank=False)
-    portfolio = models.ForeignKey(Portfolio, on_delete=models.SET_NULL, null=True)
+    id = models.AutoField(
+        primary_key=True,
+    )
+    date = models.DateField(
+        blank=False,
+        null=False,
+        auto_now=True,
+    )
+    quantity = models.FloatField(
+        verbose_name="Quantity",
+    )
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+    )
+    currency = models.ForeignKey(
+        Currency,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+    price = models.FloatField(
+        verbose_name="Price",
+    )
+    type = models.CharField(
+        max_length=25,
+        choices=TYPES
+    )
 
-    # Auto this user
+    def update_price(self):
+        # TODO : update auto price
+        pass
 
     def __str__(self):
-        return f"{self.transaction_id}"
+        return f"{self.id}"
+
+# class Balance(models.Model):
+#     pass
+# class Portfolio(models.Model):
+#     CRYPTO = "crypto"
+#     TYPES = [
+#         (CRYPTO, "Currency"),
+#     ]
+#
+#     portfolio_id = models.AutoField(primary_key=True)
+#     name = models.CharField(max_length=255, blank=True, null=True)
+#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False, null=False)
+#     account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
+#     type = models.CharField(max_length=25, blank=True, choices=TYPES, unique=True)
+#     total = MoneyField(
+#         decimal_places=2,
+#         default=0,
+#         default_currency='USD',
+#         max_digits=11,
+#     )
+#     last_update = models.DateField(blank=True, null=True, default=datetime.now)
+#
+#     def __str__(self):
+#         return f"Portfolio_{self.name} de {self.user}"
+#
+#     def save(self, *args, **kwargs):
+#         transactions = Transaction.objects.filter(user=self.user)
+#         totalTransactions = 0
+#         for transaction in transactions:
+#             totalTransactions = totalTransactions + (transaction.quantity * transaction.crypto.price)
+#         self.total = totalTransactions
+#         self.account = Account.objects.filter(user=self.user).first()
+#         super().save(*args, **kwargs)

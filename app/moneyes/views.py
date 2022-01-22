@@ -6,6 +6,7 @@ from django.http import HttpResponse
 def home(request):
     return render(request, 'index.html')
 
+
 @login_required
 def dashboard(request):
     return HttpResponse("Yo le dashboard")

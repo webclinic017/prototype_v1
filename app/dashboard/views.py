@@ -10,18 +10,18 @@ from django import forms
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
-from dashboard.models import Portfolio, Account, Transaction, Balance
+from dashboard.models import Account, Transaction
 import requests
 
 
 class DashboardHomeList(ListView):
-    model = Portfolio
+    model = Account
     template_name = "dashboard/portfolio_list.html"
     context_object_name = "portfolio"
 
 
 class DashboardAddCrypto(CreateView):
-    model = Portfolio
+    model = Account
     template_name = "dashboard/portfolio_create.html"
     fields = ['name', 'type']
     success_url = reverse_lazy('dashboard-home')
@@ -40,16 +40,6 @@ class DashboardAddTransaction(CreateView):
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
-            transactions = Transaction.objects.filter(user=self.request.user)
-            totalTransactions = 0
-            for transaction in transactions:
-                totalTransactions = totalTransactions + (transaction.quantity * transaction.crypto.price)
-            portfolio = Portfolio.objects.get(user=self.request.user)
-            portfolio.total = totalTransactions
-            portfolio.last_update = date.today()
-            balance = Balance.objects.get(account=portfolio.account)
-            print(portfolio)
-            portfolio.save()
             form.instance.user = self.request.user
         return super().form_valid(form) 
 

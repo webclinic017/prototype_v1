@@ -6,7 +6,7 @@ from django.db import models
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
-            raise ValueError('Rentrez email')
+            raise ValueError('Put Email Address')
 
         user = self.model(
             email=self.normalize_email(email)
@@ -30,7 +30,7 @@ class CustomUser(AbstractBaseUser):
         max_length=255,
         blank=False
     )
-    # Utilisaeurs nécessaires pour l'interface d'admin
+    # User for admin interface
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
