@@ -1,5 +1,6 @@
 import hmac
 import time
+from datetime import date
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
@@ -39,11 +40,17 @@ class DashboardAddTransaction(CreateView):
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
+            transactions = Transaction.objects.filter(user=self.request.user)
+            totalTransactions = 0
+            for transaction in transactions:
+                totalTransactions = totalTransactions + (transaction.quantity * transaction.crypto.price)
             portfolio = Portfolio.objects.get(user=self.request.user)
+            portfolio.total = totalTransactions
+            portfolio.last_update = date.today()
             balance = Balance.objects.get(account=portfolio.account)
-            print(balance)
+            print(portfolio)
             portfolio.save()
-            form.instance.user = self.  request.user
+            form.instance.user = self.request.user
         return super().form_valid(form) 
 
 

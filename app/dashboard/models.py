@@ -2,6 +2,7 @@
 import hashlib
 import hmac
 import time
+from datetime import datetime
 
 from django.db import models
 from djmoney.models.fields import MoneyField
@@ -71,6 +72,7 @@ class Portfolio(models.Model):
         default_currency='USD',
         max_digits=11,
     )
+    last_update = models.DateField(blank=True, null=True, default=datetime.now)
 
     def __str__(self):
         return f"Portfolio_{self.name} de {self.user}"
