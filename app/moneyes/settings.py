@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'dashboard',
     'accounts',
     'djmoney',
+    'extra_views',
 ]
 
 MIDDLEWARE = [

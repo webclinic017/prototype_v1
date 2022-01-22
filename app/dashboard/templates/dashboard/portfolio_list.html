@@ -4,7 +4,6 @@
 <title>Portfolio</title>
 {% endblock %}
 {% block body %}
-        <a href="" class="button">Add Coinbase Account</a>
         {% for pf in portfolio %}
         <h3>{{pf.name}} : {{ pf.total }}</h3>
         {% endfor %}

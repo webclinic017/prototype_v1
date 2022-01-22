@@ -1,7 +1,11 @@
-from datetime import datetime
+# Coinbase Auth imports
+import hashlib
+import hmac
+import time
 
 from django.db import models
 from djmoney.models.fields import MoneyField
+from requests.auth import AuthBase
 
 from accounts.models import CustomUser
 
@@ -27,7 +31,7 @@ class Balance(models.Model):
         verbose_name = "Balance"
 
     def __str__(self):
-        return self.account
+        return str(self.value)
 
     def save(self, *args, **kwargs):
         pass
