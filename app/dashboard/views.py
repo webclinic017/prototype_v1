@@ -17,11 +17,14 @@ import requests
 class DashboardHomeList(ListView):
     model = Account
     template_name = "dashboard/portfolio_list.html"
-    context_object_name = "account"
+    context_object_name = "accounts"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['holdings'] = Holding.objects.filter(
+            user=self.request.user
+        )
+        context['transactions'] = Transaction.objects.filter(
             user=self.request.user
         )
         return context

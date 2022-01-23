@@ -143,7 +143,7 @@ class Holding(models.Model):
         return value
 
     def __str__(self):
-        return f"{self.user} Holdings"
+        return f"{self.user.name} {self.currency.type}"
 
     def add_transaction(self):
         # TODO : Add new transaction to update holding
