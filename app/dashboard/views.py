@@ -20,13 +20,9 @@ class DashboardHomeList(ListView):
     context_object_name = "account"
 
     def get_context_data(self, **kwargs):
-        """
-        This has been overridden to add `car` to the template context,
-        now you can use {{ car }} within the template
-        """
         context = super().get_context_data(**kwargs)
         context['holdings'] = Holding.objects.filter(
-            user = self.request.user
+            user=self.request.user
         )
         return context
 
@@ -58,10 +54,9 @@ class DashboardAddTransaction(CreateView):
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
         form.instance.type = form.instance.currency.type
-        return super().form_valid(form) 
+        return super().form_valid(form)
 
-
-# class BrokerApiCreate(CreateView):
+    # class BrokerApiCreate(CreateView):
 #     model = BrokerApi
 #     success_url = reverse_lazy("dashboard-home")
 #     context_object_name = "form"
