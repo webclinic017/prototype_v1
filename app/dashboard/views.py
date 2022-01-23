@@ -10,14 +10,25 @@ from django import forms
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
-from dashboard.models import Account, Transaction
+from dashboard.models import Account, Transaction, Holding
 import requests
 
 
 class DashboardHomeList(ListView):
     model = Account
     template_name = "dashboard/portfolio_list.html"
-    context_object_name = "portfolio"
+    context_object_name = "account"
+
+    def get_context_data(self, **kwargs):
+        """
+        This has been overridden to add `car` to the template context,
+        now you can use {{ car }} within the template
+        """
+        context = super().get_context_data(**kwargs)
+        context['holdings'] = Holding.objects.filter(
+            user = self.request.user
+        )
+        return context
 
 
 class DashboardAddCrypto(CreateView):
@@ -35,12 +46,18 @@ class DashboardAddCrypto(CreateView):
 class DashboardAddTransaction(CreateView):
     model = Transaction
     template_name = "dashboard/portfolio_create.html"
-    fields = "__all__"
+    fields = (
+        "date",
+        "quantity",
+        "currency",
+        "price",
+    )
     success_url = reverse_lazy('dashboard-home')
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
+        form.instance.type = form.instance.currency.type
         return super().form_valid(form) 
 
 

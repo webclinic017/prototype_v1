@@ -5,6 +5,8 @@ import time
 from datetime import datetime
 
 from django.db import models
+from django.db.models import Sum
+from django.shortcuts import get_object_or_404
 from djmoney.models.fields import MoneyField
 from requests.auth import AuthBase
 
@@ -38,12 +40,24 @@ class Account(models.Model):
     updated = models.DateTimeField(
         blank=True,
     )
-    balance = models.FloatField(
-        verbose_name="Current balance",
-    )
+
+    @property
+    def balance(self):
+        myholdings = [
+            holding.value for holding in Holding.objects.filter(
+            user=self.user,
+        )
+        ]
+        return sum(myholdings)
+
+    class Meta:
+        verbose_name = "Account"
 
     def __str__(self):
         return f"Account_{self.user}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
     def update_holding(self):
         # TODO : This function to update actual user holdings
@@ -76,6 +90,9 @@ class Currency(models.Model):
         choices=TYPES
     )
 
+    def update_price(self):
+        # TODO : update auto price
+        pass
 
     def __str__(self):
         return f"{self.name}"
@@ -89,25 +106,44 @@ class Holding(models.Model):
         Currency,
         on_delete=models.PROTECT
     )
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
         blank=False,
         null=False,
-        unique=True,
-    )
-    quantity = models.FloatField(
-        verbose_name=f"Quantity of {currency.name}"
     )
     created = models.DateTimeField(
+        default=datetime.now(),
         blank=True,
     )
     updated = models.DateTimeField(
+        default=datetime.now(),
         blank=True,
     )
 
+    @property
+    def quantity(self):
+        quantity = Transaction.objects.filter(
+            user=self.user,
+            currency=self.currency
+        ).aggregate(
+            Sum(
+                "quantity"
+            )
+        ).get(
+            "quantity__sum"
+        )
+        return quantity
+
+    @property
+    def value(self):
+        quantity = self.quantity
+        price = self.currency.price
+        value = quantity * price
+        return value
+
     def __str__(self):
-        return f"{self.user.name} Holdings"
+        return f"{self.user} Holdings"
 
     def add_transaction(self):
         # TODO : Add new transaction to update holding
@@ -119,9 +155,9 @@ class Transaction(models.Model):
         primary_key=True,
     )
     date = models.DateField(
+        default=datetime.now,
         blank=False,
         null=False,
-        auto_now=True,
     )
     quantity = models.FloatField(
         verbose_name="Quantity",
@@ -138,17 +174,22 @@ class Transaction(models.Model):
         null=False,
         blank=False
     )
-    price = models.FloatField(
+    price = models.DecimalField(
         verbose_name="Price",
+        max_digits=6,
+        decimal_places=2
     )
     type = models.CharField(
         max_length=25,
         choices=TYPES
     )
 
-    def update_price(self):
-        # TODO : update auto price
-        pass
+    def save(self, *args, **kwargs):
+        holding = Holding.objects.get_or_create(
+            user=self.user,
+            currency=self.currency,
+        )
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.id}"

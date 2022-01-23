@@ -4,8 +4,12 @@
 <title>Portfolio</title>
 {% endblock %}
 {% block body %}
-        {% for pf in portfolio %}
-        <h3>{{pf.name}} : {{ pf.total }}</h3>
+        {% for acc in account %}
+        <h3>Total {{ acc.balance }} $ </h3>
+        {% endfor %}
+
+        {% for hold in holdings %}
+        <h3>{{ hold.currency.name }} {{ hold.value }} $</h3>
         {% endfor %}
 
 {% endblock %}
