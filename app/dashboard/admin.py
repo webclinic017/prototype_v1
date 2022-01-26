@@ -39,6 +39,8 @@ class HoldingAdmin(admin.ModelAdmin):
         "updated",
         "quantity",
         "value",
+        "average_purchase_price",
+        "gain_loss_holding"
     )
 
 
@@ -51,6 +53,7 @@ class TransactionAdmin(admin.ModelAdmin):
         "user",
         "currency",
         "price",
+        "purchase_price",
     )
 
 @admin.register(CustomUser)

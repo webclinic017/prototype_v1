@@ -45,10 +45,13 @@ class Account(models.Model):
     def balance(self):
         myholdings = [
             holding.value for holding in Holding.objects.filter(
-            user=self.user,
-        )
+                user=self.user,
+            )
         ]
         return sum(myholdings)
+
+
+
 
     class Meta:
         verbose_name = "Account"
@@ -133,6 +136,8 @@ class Holding(models.Model):
         ).get(
             "quantity__sum"
         )
+        if not quantity:
+            quantity = 0
         return quantity
 
     @property
@@ -141,6 +146,22 @@ class Holding(models.Model):
         price = self.currency.price
         value = quantity * price
         return value
+
+    @property
+    def average_purchase_price(self):
+        purchases_prices = [
+            transaction.purchase_price for transaction in Transaction.objects.filter(
+                user=self.user,
+                currency=self.currency
+            )
+        ]
+        average_purchase_price = sum(purchases_prices) / self.quantity
+        return average_purchase_price
+
+    @property
+    def gain_loss_holding(self):
+        percent = (self.currency.price - self.average_purchase_price) / self.average_purchase_price
+        return str(percent) + '%'
 
     def __str__(self):
         return f"{self.user.name} {self.currency.type}"
@@ -174,15 +195,20 @@ class Transaction(models.Model):
         null=False,
         blank=False
     )
-    price = models.DecimalField(
+    price = models.FloatField(
         verbose_name="Price",
-        max_digits=6,
-        decimal_places=2
     )
     type = models.CharField(
         max_length=25,
         choices=TYPES
     )
+
+    @property
+    def purchase_price(self):
+        quantity = self.quantity
+        price = self.price
+        purchase_price = quantity * price
+        return purchase_price
 
     def save(self, *args, **kwargs):
         holding = Holding.objects.get_or_create(

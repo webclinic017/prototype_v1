@@ -28,7 +28,7 @@
             <h3>Assets</h3>
             {% for hold in holdings %}
             <div class="asset-preview">
-                <p>{{ hold.currency.id }} ${{ hold.value }}</p>
+                <p>{{ hold.currency.id }} ${{ hold.value }} | {{hold.gain_loss_holding}} </p>
             </div>
             {% endfor %}
         </div>
