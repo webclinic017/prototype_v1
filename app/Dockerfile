@@ -15,6 +15,7 @@ RUN apk update \
 
 # install dependencies
 RUN pip install --upgrade pip
+RUN python3.9 -m pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 

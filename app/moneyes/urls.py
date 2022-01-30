@@ -17,8 +17,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from accounts.views import AccountsHomeNoConnect
 from . import settings
-from .views import home, dashboard
+from .views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),

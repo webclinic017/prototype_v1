@@ -4,11 +4,11 @@
 <title>Portfolio</title>
 {% endblock %}
 {% block body %}
-    <section class="mx-auto">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Créer">
-        </form>
-    </section>
+<section class="mx-auto">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Créer">
+    </form>
+</section>
 {% endblock %}

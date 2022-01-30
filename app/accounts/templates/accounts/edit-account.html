@@ -1,0 +1,26 @@
+{% extends 'gabarit.html' %}
+
+{% block title %}
+<title>Sign up</title>
+{% endblock %}
+
+{% block body %}
+
+
+    <a href="{% url 'logout'%}"> Log Out </a>
+
+    <form method="POST">
+    {% csrf_token %}
+
+    {{form.as_p}}
+
+    {% for message in errors.values %}
+    <h3 style="color: rebeccapurple;">
+        {{ message }}
+    </h3>
+    {% endfor %}
+
+    <input type="submit" value="Update Account">
+    </form>
+
+{% endblock %}

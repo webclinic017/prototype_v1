@@ -85,7 +85,10 @@ header {
 
 .icon {
     width: 100%;
-    padding: 0.5em;
+}
+
+.icon-container {
+    width: 100%;
 }
 
 .logo {
@@ -149,4 +152,17 @@ ________________ DASHBOARD _____________
     background: var(--special);
     display: flex;
     justify-content: space-between;
+}
+
+/*
+________________ HOME _____________
+ */
+
+.container-col-home {
+    display: flex;
+    flex-direction: row;
+}
+
+.col {
+
 }

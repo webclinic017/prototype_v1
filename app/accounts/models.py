@@ -44,6 +44,10 @@ class CustomUser(AbstractBaseUser):
         max_length=125,
         null=True,
     )
+    #thumbnail = models.ImageField(
+    #    blank=True,
+    #    upload_to='thumbnails'
+    #)
     # User for admin interface
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

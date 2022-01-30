@@ -1,12 +1,20 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 
 def home(request):
-    return render(request, 'index.html')
+    if request.user.is_authenticated:
+        response = redirect('/dashboard/')
+        return response
 
+    else:
+        form_login = AuthenticationForm()
+        form_creation = UserCreationForm()
+        context = {
+            "form_login": form_login,
+            "form_creation": form_creation,
+        }
 
-@login_required
-def dashboard(request):
-    return HttpResponse("Yo le dashboard")
+    return render(request, "accounts/home-account.html", context=context)
