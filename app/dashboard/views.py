@@ -9,7 +9,9 @@ from django.shortcuts import render
 from django import forms
 # Create your views here.
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+
+from dashboard.forms import UpdateTransactionForm
 from dashboard.models import Account, Transaction, Holding
 import requests
 
@@ -42,7 +44,7 @@ class DashboardAddCrypto(CreateView):
         return super().form_valid(form)
 
 
-class DashboardAddTransaction(CreateView):
+class TransactionCreate(CreateView):
     model = Transaction
     template_name = "dashboard/portfolio_create.html"
     fields = (
@@ -60,6 +62,33 @@ class DashboardAddTransaction(CreateView):
         return super().form_valid(form)
 
     # class BrokerApiCreate(CreateView):
+
+
+class TransactionUpdate(UpdateView):
+    model = Transaction
+    form_class = UpdateTransactionForm
+    template_name = "dashboard/update_transaction.html"
+    success_url = reverse_lazy("dashboard-home")
+
+
+class TransactionDelete(DeleteView):
+    model = Transaction
+    template_name = "dashboard/delete_transaction.html"
+    success_url = reverse_lazy("dashboard-home")
+
+
+class TransactionDetail(DetailView):
+    model = Transaction
+    template_name = "dashboard/detail_transaction.html"
+
+
+class TransactionsList(ListView):
+    model = Transaction
+    template_name = "dashboard/list_transactions.html"
+    context_object_name = "transactions"
+
+
+
 #     model = BrokerApi
 #     success_url = reverse_lazy("dashboard-home")
 #     context_object_name = "form"

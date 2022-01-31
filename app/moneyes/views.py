@@ -10,11 +10,5 @@ def home(request):
         return response
 
     else:
-        form_login = AuthenticationForm()
-        form_creation = UserCreationForm()
-        context = {
-            "form_login": form_login,
-            "form_creation": form_creation,
-        }
-
-    return render(request, "accounts/home-account.html", context=context)
+        response = redirect('/accounts/login/')
+        return response
