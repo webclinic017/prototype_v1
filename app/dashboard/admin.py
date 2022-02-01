@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from accounts.models import CustomUser
-from .models import Currency, Transaction, Account, Holding
+from .models import Currency, Transaction, Account, Holding, Portfolio, Type
 
 
 @admin.register(Account)
@@ -56,6 +56,7 @@ class TransactionAdmin(admin.ModelAdmin):
         "purchase_price",
     )
 
+
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
     list_display = (
@@ -64,4 +65,22 @@ class UserAdmin(admin.ModelAdmin):
         "email",
         "is_admin",
         "is_staff",
+    )
+
+
+@admin.register(Type)
+class TypeAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+    )
+
+
+@admin.register(Portfolio)
+class PortfolioAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "type",
+        "user",
+        "value",
     )

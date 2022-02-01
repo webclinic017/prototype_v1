@@ -18,6 +18,19 @@ TYPES = [
 ]
 
 
+class Type(models.Model):
+    id = models.AutoField(
+        primary_key=True,
+    )
+    name = models.CharField(
+        max_length=25,
+        unique=True,
+    )
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class Account(models.Model):
     """
         Account Class to display actual total
@@ -49,9 +62,6 @@ class Account(models.Model):
             )
         ]
         return sum(myholdings)
-
-
-
 
     class Meta:
         verbose_name = "Account"
@@ -88,9 +98,9 @@ class Currency(models.Model):
     updated = models.DateTimeField(
         blank=True,
     )
-    type = models.CharField(
-        max_length=25,
-        choices=TYPES
+    type = models.ForeignKey(
+        Type,
+        on_delete=models.CASCADE,
     )
 
     def update_price(self):
@@ -122,6 +132,10 @@ class Holding(models.Model):
     updated = models.DateTimeField(
         default=datetime.now(),
         blank=True,
+    )
+    type = models.OneToOneField(
+        Type,
+        on_delete=models.CASCADE,
     )
 
     @property
@@ -161,7 +175,14 @@ class Holding(models.Model):
     @property
     def gain_loss_holding(self):
         percent = (self.currency.price - self.average_purchase_price) / self.average_purchase_price
-        return str(percent) + '%'
+        percent = round(percent, 2)
+        if percent > 0:
+            sign = '+'
+        elif percent < 0:
+            sign = '-'
+        else:
+            sign = ' '
+        return sign + str(percent) + '%'
 
     def __str__(self):
         return f"{self.user.name} {self.currency.type}"
@@ -169,6 +190,33 @@ class Holding(models.Model):
     def add_transaction(self):
         # TODO : Add new transaction to update holding
         pass
+
+
+class Portfolio(models.Model):
+    id = models.AutoField(
+        primary_key=True,
+    )
+    type = models.OneToOneField(
+        Type,
+        on_delete=models.CASCADE,
+        unique=True
+    )
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE
+    )
+
+    @property
+    def value(self):
+        mywallets = [
+            holding.value for holding in Holding.objects.filter(
+                user=self.user,
+                type=self.type,
+            )
+        ]
+        if not mywallets:
+            mywallets = 0
+        return mywallets[0]
 
 
 class Transaction(models.Model):
@@ -198,9 +246,9 @@ class Transaction(models.Model):
     price = models.FloatField(
         verbose_name="Price",
     )
-    type = models.CharField(
-        max_length=25,
-        choices=TYPES
+    type = models.ForeignKey(
+        Type,
+        on_delete=models.CASCADE,
     )
 
     @property
@@ -214,41 +262,9 @@ class Transaction(models.Model):
         holding = Holding.objects.get_or_create(
             user=self.user,
             currency=self.currency,
+            type=self.type,
         )
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.id}"
-
-# class Balance(models.Model):
-#     pass
-# class Portfolio(models.Model):
-#     CRYPTO = "crypto"
-#     TYPES = [
-#         (CRYPTO, "Currency"),
-#     ]
-#
-#     portfolio_id = models.AutoField(primary_key=True)
-#     name = models.CharField(max_length=255, blank=True, null=True)
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False, null=False)
-#     account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
-#     type = models.CharField(max_length=25, blank=True, choices=TYPES, unique=True)
-#     total = MoneyField(
-#         decimal_places=2,
-#         default=0,
-#         default_currency='USD',
-#         max_digits=11,
-#     )
-#     last_update = models.DateField(blank=True, null=True, default=datetime.now)
-#
-#     def __str__(self):
-#         return f"Portfolio_{self.name} de {self.user}"
-#
-#     def save(self, *args, **kwargs):
-#         transactions = Transaction.objects.filter(user=self.user)
-#         totalTransactions = 0
-#         for transaction in transactions:
-#             totalTransactions = totalTransactions + (transaction.quantity * transaction.crypto.price)
-#         self.total = totalTransactions
-#         self.account = Account.objects.filter(user=self.user).first()
-#         super().save(*args, **kwargs)

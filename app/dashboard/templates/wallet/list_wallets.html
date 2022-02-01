@@ -1,0 +1,17 @@
+{% extends 'gabarit.html' %}
+
+{% block title %}
+<title>Myes Wallets</title>
+{% endblock %}
+{% block body %}
+<h1>Wallets</h1>
+{% for wallet in wallets %}
+<div class="transaction-preview">
+    <div>
+                {{ wallet.type }}
+                $ {{ wallet.value }}
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -15,12 +15,16 @@
 <div class="container-dashboard">
     <div class="container-wallets">
         <div class="block-preview">
-            <h3>Wallets</h3>
             {% for account in accounts %}
+            <h3>Wallets | TOTAL : $ {{ account.balance }}</h3>
+            {% endfor %}
+            {% for wallet in wallets %}
             <div class="wallet-preview">
-                <p>${{ account.balance }}</p>
+                {{ wallet.type }}
+                $ {{ wallet.value }}
             </div>
             {% endfor %}
+            <a href="{% url 'list-wallets' %}">Show more...</a>
         </div>
     </div>
     <div class="container-assets">
@@ -28,9 +32,12 @@
             <h3>Assets</h3>
             {% for hold in holdings %}
             <div class="asset-preview">
-                <p>{{ hold.currency.id }} ${{ hold.value }} | {{hold.gain_loss_holding}} </p>
+                {{ hold.currency.id }} |
+                $ {{ hold.value }} |
+                {{ hold.gain_loss_holding }}
             </div>
             {% endfor %}
+            <a href="#">Show more...</a>
         </div>
     </div>
     <div class="container-transactions">
@@ -38,14 +45,15 @@
             <h3>Transactions</h3>
             {% for transaction in transactions %}
             <div class="transaction-preview">
-                <p>
+                <div>
                     {{ transaction.date }}
                     {{ transaction.quantity }}
                     {{ transaction.currency }}
                     {{ transaction.price }}
-                </p>
+                </div>
             </div>
             {% endfor %}
+            <a href="{% url 'list-transactions' %}">Show more...</a>
         </div>
     </div>
 </div>

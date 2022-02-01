@@ -12,8 +12,12 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from dashboard.forms import UpdateTransactionForm
-from dashboard.models import Account, Transaction, Holding
+from dashboard.models import Account, Transaction, Holding, Portfolio
 import requests
+
+"""
+--------------- DASHBOARD ---------------
+"""
 
 
 class DashboardHomeList(ListView):
@@ -27,6 +31,9 @@ class DashboardHomeList(ListView):
             user=self.request.user
         )
         context['transactions'] = Transaction.objects.filter(
+            user=self.request.user
+        )
+        context['wallets'] = Portfolio.objects.filter(
             user=self.request.user
         )
         return context
@@ -44,9 +51,14 @@ class DashboardAddCrypto(CreateView):
         return super().form_valid(form)
 
 
+"""
+--------------- TRANSACTIONS ---------------
+"""
+
+
 class TransactionCreate(CreateView):
     model = Transaction
-    template_name = "dashboard/portfolio_create.html"
+    template_name = "transaction/portfolio_create.html"
     fields = (
         "date",
         "quantity",
@@ -67,56 +79,33 @@ class TransactionCreate(CreateView):
 class TransactionUpdate(UpdateView):
     model = Transaction
     form_class = UpdateTransactionForm
-    template_name = "dashboard/update_transaction.html"
+    template_name = "transaction/update_transaction.html"
     success_url = reverse_lazy("dashboard-home")
 
 
 class TransactionDelete(DeleteView):
     model = Transaction
-    template_name = "dashboard/delete_transaction.html"
+    template_name = "transaction/delete_transaction.html"
     success_url = reverse_lazy("dashboard-home")
 
 
 class TransactionDetail(DetailView):
     model = Transaction
-    template_name = "dashboard/detail_transaction.html"
+    template_name = "transaction/detail_transaction.html"
 
 
 class TransactionsList(ListView):
     model = Transaction
-    template_name = "dashboard/list_transactions.html"
+    template_name = "transaction/list_transactions.html"
     context_object_name = "transactions"
 
 
-
-#     model = BrokerApi
-#     success_url = reverse_lazy("dashboard-home")
-#     context_object_name = "form"
-#     form_class = BrokerApiForm
-#
-#     def form_valid(self, form):
-#         if self.request.user.is_authenticated:
-#             form.instance.user = self.request.user
-#         # url = "https://api.exchange.coinbase.com/transfers"
-#         # headers = {
-#         #     "Accept": "application/json",
-#         #     "cb-access-key": form.instance.api_key,
-#         #     "cb-access-passphrase": form.instance.passphrase,
-#         #     "cb-access-sign": form.instance.secret_key,
-#         #     "cb-access-timestamp": timestamp,
-#         # }
-#         # response = requests.request("GET", url, headers=headers)
-#         response = CoinbaseWalletAuth(form.instance.api_key, form.instance.secret_key)
-#         print(vars(form.instance))
-#         return super().form_valid(form)
+"""
+--------------- WALLETS ---------------
+"""
 
 
-# def add(request):
-#     request_content = request.GET
-#     code = request_content.__getitem__("code")
-#     connection_id = request_content.__getitem__("connection_id")
-#
-#     data = {"client_id": code, "client_secret": connection_id}
-#     url = "https://moneyes-prototypev1-sandbox.biapi.pro/2.0/auth/init"
-#     response = requests.post(url, data)
-#     return HttpResponse(response)
+class WalletsList(ListView):
+    model = Holding
+    template_name = "wallet/list_wallets.html"
+    context_object_name = "wallets"
