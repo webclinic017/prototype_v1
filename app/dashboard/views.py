@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from dashboard.forms import UpdateTransactionForm
-from dashboard.models import Account, Transaction, Holding, Portfolio
+from dashboard.models import Account, Transaction, Holding, Portfolio, Currency
 import requests
 
 """
@@ -120,3 +120,14 @@ class HoldingsList(ListView):
     model = Holding
     template_name = "asset/list_assets.html"
     context_object_name = "assets"
+
+
+"""
+--------------- CURRENCIES ---------------
+"""
+
+
+class CurrenciesList(ListView):
+    model = Currency
+    template_name = "currency/list_currencies.html"
+    context_object_name = "currencies"
