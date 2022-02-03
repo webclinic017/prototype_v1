@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from .views import DashboardHomeList, DashboardAddCrypto, TransactionCreate, TransactionUpdate, TransactionDelete, \
-    TransactionDetail, TransactionsList, WalletsList
+    TransactionDetail, TransactionsList, WalletsList, HoldingsList
 
 urlpatterns = [
     path('', login_required(DashboardHomeList.as_view(), login_url='home'), name="dashboard-home"),
     path('add/', login_required(DashboardAddCrypto.as_view(), login_url='home'), name="dashboard-add"),
 
     path('transaction/add', login_required(TransactionCreate.as_view(), login_url='home'),
-         name="dashboard-add-transaction"),
+         name="add-transaction"),
     path('transaction/<int:pk>/edit', login_required(TransactionUpdate.as_view(), login_url='home'),
          name="edit-transaction"),
     path('transaction/<int:pk>/delete', login_required(TransactionDelete.as_view(), login_url='home'),
@@ -19,6 +19,8 @@ urlpatterns = [
     path('transactions', login_required(TransactionsList.as_view(), login_url='home'), name="list-transactions"),
 
     path('wallets', login_required(WalletsList.as_view(), login_url='home'), name="list-wallets"),
+
+    path('assets', login_required(HoldingsList.as_view(), login_url='home'), name="list-assets"),
 
     # path('add-bank/', login_required(BrokerApiCreate.as_view(), login_url='home'), name="dashboard-add-bank"),
 ]

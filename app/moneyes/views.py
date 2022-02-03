@@ -6,8 +6,7 @@ from django.http import HttpResponse
 
 def home(request):
     if request.user.is_authenticated:
-        response = redirect('/dashboard/')
-        return response
+        return render(request, "index.html")
 
     else:
         response = redirect('/accounts/login/')

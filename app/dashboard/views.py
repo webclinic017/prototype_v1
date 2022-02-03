@@ -58,7 +58,7 @@ class DashboardAddCrypto(CreateView):
 
 class TransactionCreate(CreateView):
     model = Transaction
-    template_name = "transaction/portfolio_create.html"
+    template_name = "transaction/create_transaction.html"
     fields = (
         "date",
         "quantity",
@@ -106,6 +106,17 @@ class TransactionsList(ListView):
 
 
 class WalletsList(ListView):
-    model = Holding
+    model = Portfolio
     template_name = "wallet/list_wallets.html"
     context_object_name = "wallets"
+
+
+"""
+--------------- ASSETS ---------------
+"""
+
+
+class HoldingsList(ListView):
+    model = Holding
+    template_name = "asset/list_assets.html"
+    context_object_name = "assets"

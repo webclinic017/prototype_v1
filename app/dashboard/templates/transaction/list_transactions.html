@@ -4,7 +4,13 @@
 <title>Myes transactions</title>
 {% endblock %}
 {% block body %}
-<h1>Transactions</h1>
+<h1>
+    Transactions
+    <a href="{% url 'add-transaction' %}">
+    <i class="bi bi-plus"></i>
+</a>
+</h1>
+
 {% for transaction in transactions %}
 <div class="transaction-preview">
     <div>
