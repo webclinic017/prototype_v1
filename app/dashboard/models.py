@@ -1,14 +1,11 @@
 # Coinbase Auth imports
-import hashlib
-import hmac
 import time
 from datetime import datetime
 
+import websocket
 from django.db import models
 from django.db.models import Sum
-from django.shortcuts import get_object_or_404
-from djmoney.models.fields import MoneyField
-from requests.auth import AuthBase
+import finnhub
 
 from accounts.models import CustomUser
 
@@ -79,7 +76,7 @@ class Account(models.Model):
 
 class Currency(models.Model):
     id = models.CharField(
-        max_length=5,
+        max_length=24,
         primary_key=True,
     )
     crypto = models.BooleanField(
@@ -103,9 +100,12 @@ class Currency(models.Model):
         on_delete=models.CASCADE,
     )
 
-    def update_price(self):
-        # TODO : update auto price
-        pass
+    @property
+    def updated_price(self):
+        finnhub_client = finnhub.Client(api_key="sandbox_c1ksus237fktsl8cmv40")
+        quote = finnhub_client.quote(self.id)['c']
+
+        return quote
 
     def __str__(self):
         return f"{self.name}"
@@ -156,33 +156,53 @@ class Holding(models.Model):
 
     @property
     def value(self):
-        quantity = self.quantity
-        price = self.currency.price
-        value = quantity * price
-        return value
+        try:
+            quantity = self.quantity
+            price = self.currency.price
+            value = quantity * price
+        except:
+            print("Value calculation error")
+            value = 0
+        finally:
+            return value
 
     @property
     def average_purchase_price(self):
-        purchases_prices = [
-            transaction.purchase_price for transaction in Transaction.objects.filter(
-                user=self.user,
-                currency=self.currency
-            )
-        ]
-        average_purchase_price = sum(purchases_prices) / self.quantity
-        return average_purchase_price
+        try:
+            purchases_prices = [
+                transaction.purchase_price for transaction in Transaction.objects.filter(
+                    user=self.user,
+                    currency=self.currency
+                )
+            ]
+            average_purchase_price = sum(purchases_prices) / self.quantity
+        except ZeroDivisionError:
+            print(ZeroDivisionError)
+            average_purchase_price = 0
+        except:
+            print("Error when calculate Average Purchase Price")
+        finally:
+            return average_purchase_price
 
     @property
     def gain_loss_holding(self):
-        percent = (self.currency.price - self.average_purchase_price) / self.average_purchase_price
-        percent = round(percent, 2)
-        if percent > 0:
-            sign = '+'
-        elif percent < 0:
-            sign = '-'
-        else:
-            sign = ' '
-        return sign + str(percent) + '%'
+        try:
+            percent = (self.currency.price - self.average_purchase_price) / self.average_purchase_price
+            percent = round(percent, 2)
+        except ZeroDivisionError:
+            print(ZeroDivisionError)
+            percent = 0
+        except:
+            print(f"Error when calculate gain/loss for {self.id} Holding")
+            percent = 0
+        finally:
+            if percent > 0:
+                sign = '+'
+            elif percent < 0:
+                sign = '-'
+            else:
+                sign = ' '
+            return sign + str(percent) + '%'
 
     def __str__(self):
         return f"{self.user.name} {self.currency.type}"
@@ -208,15 +228,26 @@ class Portfolio(models.Model):
 
     @property
     def value(self):
-        mywallets = [
+        wallets = [
+
             holding.value for holding in Holding.objects.filter(
                 user=self.user,
                 type=self.type,
             )
         ]
-        if not mywallets:
+        try:
+            mywallets = wallets[0]
+        except IndexError:
+            print(IndexError)
             mywallets = 0
-        return mywallets[0]
+        except ValueError:
+            print(ValueError)
+            mywallets = 0
+        except:
+            print(f"Error to fetch wallets' {self.user}")
+            mywallets = 0
+        finally:
+            return mywallets
 
 
 class Transaction(models.Model):

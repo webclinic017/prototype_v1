@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard',
     'accounts',
-    'djmoney',
     'extra_views',
     'livereload',
 ]

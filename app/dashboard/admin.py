@@ -26,6 +26,7 @@ class CurrencyAdmin(admin.ModelAdmin):
         "created",
         "updated",
         "type",
+        "updated_price",
     )
 
 

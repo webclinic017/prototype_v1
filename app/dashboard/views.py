@@ -1,19 +1,10 @@
-import hmac
-import time
-from datetime import date
 
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render
-from django import forms
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from dashboard.forms import UpdateTransactionForm
 from dashboard.models import Account, Transaction, Holding, Portfolio, Currency
-import requests
 
 """
 --------------- DASHBOARD ---------------
@@ -22,7 +13,7 @@ import requests
 
 class DashboardHomeList(ListView):
     model = Account
-    template_name = "dashboard/portfolio_list.html"
+    template_name = "dashboard/dashboard.html"
     context_object_name = "accounts"
 
     def get_context_data(self, **kwargs):
