@@ -1,6 +1,9 @@
 # Coinbase Auth imports
+import decimal
+import math
 import time
 from datetime import datetime
+from decimal import Decimal
 
 import websocket
 from django.db import models
@@ -104,8 +107,8 @@ class Currency(models.Model):
     def updated_price(self):
         finnhub_client = finnhub.Client(api_key="sandbox_c1ksus237fktsl8cmv40")
         quote = finnhub_client.quote(self.id)['c']
-
         return quote
+
 
     def __str__(self):
         return f"{self.name}"
@@ -158,10 +161,18 @@ class Holding(models.Model):
     def value(self):
         try:
             quantity = self.quantity
-            price = self.currency.price
-            value = quantity * price
+            price = self.currency.updated_price
+            value = price * quantity
+            value = round(value, 2)
+            #TO DO : get precision with price decimals and not only 2
+        except ValueError:
+            print(ValueError)
+            value = 0
+        except TypeError:
+            print(TypeError)
+            value = 0
         except:
-            print("Value calculation error")
+            print(f"Error when calculate value {self.currency} Holdings")
             value = 0
         finally:
             return value

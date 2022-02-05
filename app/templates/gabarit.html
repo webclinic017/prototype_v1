@@ -67,6 +67,9 @@
     <a href="#">
         <i class="bi bi-bell"></i>
     </a>
+    <a href="#">
+        <i class="bi bi-arrow-repeat"></i>
+    </a>
     {% if user.is_authenticated %}
     <div id="account">
         <a href="{% url 'account-edit' pk=user.id %}">
