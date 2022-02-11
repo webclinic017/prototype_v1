@@ -15,8 +15,6 @@ class SignUpForm(UserCreationForm):
         )
 
 
-
-
 class LogInForm(AuthenticationForm):
     class Meta:
         model = CustomUser

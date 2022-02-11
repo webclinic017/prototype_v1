@@ -109,6 +109,11 @@ class Currency(models.Model):
         quote = finnhub_client.quote(self.id)['c']
         return quote
 
+    @property
+    def stock_candles(self):
+        finnhub_client = finnhub.Client(api_key="sandbox_c1ksus237fktsl8cmv40")
+        stock_candles = finnhub_client.stock_candles({self.id}, 'D', 1590988249, 1591852249)
+        return stock_candles
 
     def __str__(self):
         return f"{self.name}"
@@ -164,7 +169,7 @@ class Holding(models.Model):
             price = self.currency.updated_price
             value = price * quantity
             value = round(value, 2)
-            #TO DO : get precision with price decimals and not only 2
+            # TO DO : get precision with price decimals and not only 2
         except ValueError:
             print(ValueError)
             value = 0
@@ -209,8 +214,6 @@ class Holding(models.Model):
         finally:
             if percent > 0:
                 sign = '+'
-            elif percent < 0:
-                sign = '-'
             else:
                 sign = ' '
             return sign + str(percent) + '%'

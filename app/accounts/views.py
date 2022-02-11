@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
@@ -5,6 +7,7 @@ from django.views.generic import UpdateView, DetailView, CreateView, TemplateVie
 
 from accounts.forms import UserChangeAccountForm, SignUpForm, LogInForm
 from accounts.models import CustomUser
+from dashboard.models import Account
 
 
 def signup(request):
@@ -17,6 +20,8 @@ def signup(request):
             raw_password = form.cleaned_data.get("password1")
             user = authenticate(username=user.email, password=raw_password)
             login(request, user)
+            today = date.today()
+            Account.objects.create(user=user, created=today, updated=today)
             return redirect("home")
     else:
         form = SignUpForm()
@@ -32,12 +37,15 @@ def logout(request):
 class LogIn(TemplateView):
     model = CustomUser
     form_class = LogInForm
-    template_name = "registration/login.html"
-    context_object_name = "form"
+    template_name = "accounts/home-account.html"
+    context_object_name = "form_login"
     success_url = reverse_lazy('dashboard-home')
     success_message = 'Login success'
 
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_creation'] = 
+        return context
 
 
 class AccountsEdit(UpdateView):

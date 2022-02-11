@@ -1,7 +1,8 @@
-
 # Create your views here.
+import finnhub
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 
 from dashboard.forms import UpdateTransactionForm
 from dashboard.models import Account, Transaction, Holding, Portfolio, Currency
@@ -15,6 +16,11 @@ class DashboardHomeList(ListView):
     model = Account
     template_name = "dashboard/dashboard.html"
     context_object_name = "accounts"
+
+    def get_queryset(self):
+        return Account.objects.filter(
+            user=self.request.user
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,7 +49,7 @@ class DashboardAddCrypto(CreateView):
 
 
 """
---------------- TRANSACTIONS ---------------
+--------------- TRANSACTIONS -------------
 """
 
 
@@ -90,6 +96,11 @@ class TransactionsList(ListView):
     template_name = "transaction/list_transactions.html"
     context_object_name = "transactions"
 
+    def get_queryset(self):
+        return Transaction.objects.filter(
+            user=self.request.user
+        )
+
 
 """
 --------------- WALLETS ---------------
@@ -100,6 +111,11 @@ class WalletsList(ListView):
     model = Portfolio
     template_name = "wallet/list_wallets.html"
     context_object_name = "wallets"
+
+    def get_queryset(self):
+        return Portfolio.objects.filter(
+            user=self.request.user
+        )
 
 
 """
@@ -114,7 +130,7 @@ class HoldingsList(ListView):
 
 
 """
---------------- CURRENCIES ---------------
+--------------- CURRENCIES ------------
 """
 
 

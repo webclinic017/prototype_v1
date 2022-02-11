@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6, a {
 }
 
 h3 {
-    font-size: 22px;
+    font-size: 18px;
     color: var(--dark-purple);
 }
 
@@ -70,14 +70,14 @@ menu a {
 
 main {
     margin-left: 10%;
-    margin-right: 10%;
+    margin-right: var(--width-menu);
     padding: 1em;
     height: 100vh;
 }
 
 header {
     margin-left: var(--width-menu);
-    padding: 0.5em 0.5em 0.5em 3em;
+    padding: 0.5em 5% 0.5em 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -92,8 +92,8 @@ header {
 }
 
 .logo {
-    width: 372px;
-    height: 42px;
+    width: 250px;
+    height: auto;
 }
 
 .menu-ic {
@@ -146,6 +146,8 @@ ________________ DASHBOARD _____________
     height: 100%;
     border-radius: 10px;
     background-color: var(--sand);
+    display: flex;
+    flex-direction: column;
 }
 
 .wallet-preview, .asset-preview, .transaction-preview {
@@ -156,6 +158,12 @@ ________________ DASHBOARD _____________
     padding: 0.5em;
     margin-top: 1em;
     border-radius: 0.5em;
+    flex-grow: 2;
+}
+
+.transaction-preview {
+    flex-grow: 0.5;
+    height: 1.5em;
 }
 
 /*
