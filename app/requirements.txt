@@ -1,6 +1,7 @@
 Django==3.1.6
 django-extra-views==0.14.0
 django-livereload-server==0.4
+environ==1.0
 finnhub-python==2.4.8
 psycopg2-binary==2.9.3
 websocket==0.2.1
