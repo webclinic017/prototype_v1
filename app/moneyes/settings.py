@@ -136,10 +136,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "staticfiles/")
-]
-
 # ----------------------------------------------------------
 # Gestion des utilisateurs
 AUTH_USER_MODEL = "accounts.CustomUser"
