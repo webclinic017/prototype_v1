@@ -8,7 +8,7 @@ from django.views.generic import UpdateView, DetailView, CreateView, TemplateVie
 
 from accounts.forms import UserChangeAccountForm, SignUpForm, LogInForm
 from accounts.models import CustomUser
-from dashboard.models import Account
+from dashboard.models import Account, Holding
 
 
 def signup(request):

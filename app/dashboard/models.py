@@ -87,9 +87,10 @@ class Currency(models.Model):
     crypto = models.BooleanField(
         default=True,
     )
-    price = models.FloatField(
-        verbose_name="Current price",
-    )
+    # ``deprecated -> property updated_price is now the current price
+    #price = models.FloatField(
+    #    verbose_name="Current price",
+    #)
     name = models.CharField(
         max_length=20,
         blank=False
@@ -218,9 +219,6 @@ class Holding(models.Model):
     def __str__(self):
         return f"{self.user.name} {self.currency.type}"
 
-    def add_transaction(self):
-        # TODO : Add new transaction to update holding
-        pass
 
 
 class Portfolio(models.Model):
@@ -240,7 +238,6 @@ class Portfolio(models.Model):
     @property
     def value(self):
         wallets = [
-
             holding.value for holding in Holding.objects.filter(
                 user=self.user,
                 type=self.type,
@@ -286,7 +283,7 @@ class Transaction(models.Model):
         blank=False
     )
     price = models.FloatField(
-        verbose_name="Price",
+        verbose_name="Purchase price",
     )
     type = models.ForeignKey(
         Type,

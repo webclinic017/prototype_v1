@@ -18,13 +18,13 @@
             {% for account in accounts %}
             <h3>Wallets | TOTAL : $ {{ account.balance }}</h3>
             {% endfor %}
-            {% for wallet in wallets %}
-                {% if wallet.value > 0 %}
-                    <div class="wallet-preview">
-                        {{ wallet.type }}
-                        $ {{ wallet.value }}
-                    </div>
-                {% endif %}
+            {% for wallet in wallets|slice:":2" %}
+            {% if wallet.value > 0 %}
+            <div class="wallet-preview">
+                {{ wallet.type }}
+                $ {{ wallet.value }}
+            </div>
+            {% endif %}
             {% endfor %}
             <a href="{% url 'list-wallets' %}">Show more...</a>
         </div>
@@ -32,20 +32,22 @@
     <div class="container-assets">
         <div class="block-preview">
             <h3>Assets</h3>
-            {% for hold in holdings %}
+            {% for hold in holdings|slice:":3" %}
+            {% if hold.value > 0 %}
             <div class="asset-preview">
                 {{ hold.currency.id }} |
                 $ {{ hold.value }} |
                 {{ hold.gain_loss_holding }}
             </div>
+            {% endif %}
             {% endfor %}
-            <a href="#">Show more...</a>
+            <a href="{% url 'list-assets' %}">Show more...</a>
         </div>
     </div>
     <div class="container-transactions">
         <div class="block-preview">
             <h3>Transactions</h3>
-            {% for transaction in transactions %}
+            {% for transaction in transactions|slice:":5" %}
             <div class="transaction-preview">
                 <div>
                     {{ transaction.date }}

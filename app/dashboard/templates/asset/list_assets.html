@@ -4,11 +4,16 @@
 <title>Myes Assets</title>
 {% endblock %}
 {% block body %}
-<h1>Assets</h1>
+<h1>
+    Assets
+    <a href="{% url 'add-transaction' %}">
+    <i class="bi bi-plus"></i>
+</a>
+</h1>
 {% for asset in assets %}
 <div class="transaction-preview">
     <div>
-                Asset : {{ asset.currency }} |
+                {{ asset.currency }} |
                 Type : {{ asset.type }} |
                 Value : $ {{ asset.value }}
     </div>

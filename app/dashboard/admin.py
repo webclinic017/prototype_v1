@@ -21,7 +21,6 @@ class CurrencyAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "crypto",
-        "price",
         "name",
         "created",
         "updated",

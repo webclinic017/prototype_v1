@@ -1,4 +1,6 @@
 # Create your views here.
+from datetime import date
+
 import finnhub
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -68,8 +70,17 @@ class TransactionCreate(CreateView):
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
         form.instance.type = form.instance.currency.type
+        today = date.today()
+        portfolio = Portfolio.objects.filter(
+            user=self.request.user,
+            type=form.instance.type,
+        )
+        if not portfolio:
+            Portfolio.objects.create(
+                user=self.request.user,
+                type=form.instance.type,
+            )
         return super().form_valid(form)
-
 
 
 class TransactionUpdate(UpdateView):
@@ -126,6 +137,11 @@ class HoldingsList(ListView):
     model = Holding
     template_name = "asset/list_assets.html"
     context_object_name = "assets"
+
+    def get_queryset(self):
+        return Holding.objects.filter(
+            user=self.request.user
+        )
 
 
 """
