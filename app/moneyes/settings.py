@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 env = environ.Env()
-environ.Env.read_env(env_file=str(BASE_DIR / "app" / ".env"))
+environ.Env.read_env(env_file=str(BASE_DIR / "moneyes" / ".env"))
 
 
 
