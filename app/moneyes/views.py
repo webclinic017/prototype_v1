@@ -1,3 +1,4 @@
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 
 
@@ -6,5 +7,7 @@ def home(request):
         return render(request, "index.html")
 
     else:
-        response = redirect('/accounts/login/')
+        response = redirect('login')
         return response
+
+

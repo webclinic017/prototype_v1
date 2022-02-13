@@ -70,7 +70,6 @@ class TransactionCreate(CreateView):
         form.instance.type = form.instance.currency.type
         return super().form_valid(form)
 
-    # class BrokerApiCreate(CreateView):
 
 
 class TransactionUpdate(UpdateView):

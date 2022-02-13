@@ -1,6 +1,7 @@
 from datetime import date
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, DetailView, CreateView, TemplateView
@@ -26,26 +27,24 @@ def signup(request):
     else:
         form = SignUpForm()
 
+    return render(request, "registration/signup.html", context={"form": form})
+
+
+def loginUser(request):
+    if request.method == "POST":
+        form = LogInForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+    else:
+        form = LogInForm()
+
     return render(request, "registration/login.html", context={"form": form})
 
 
 def logout(request):
     logout(request)
     return redirect("home")
-
-
-class LogIn(TemplateView):
-    model = CustomUser
-    form_class = LogInForm
-    template_name = "accounts/home-account.html"
-    context_object_name = "form_login"
-    success_url = reverse_lazy('dashboard-home')
-    success_message = 'Login success'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form_creation'] = 
-        return context
 
 
 class AccountsEdit(UpdateView):

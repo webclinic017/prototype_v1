@@ -1,11 +1,11 @@
 {% extends 'gabarit.html' %}
 
 {% block title %}
-<title>Log In</title>
+<title>Sign Up</title>
 {% endblock %}
 
 {% block body %}
-    <h1>Log In</h1>
+    <h1>Sign Up</h1>
     <form method="POST">
     {% csrf_token %}
 
@@ -16,8 +16,8 @@
         {{ message }}
     </h3>
     {% endfor %}
-    <input type="submit" value="Log In">
-        <a href="{% url 'signup' %}">Sign up now !</a>
+    <input type="submit" value="Sign Up">
+        <a href="{% url 'login' %}">Log In</a>
     </form>
 
 {% endblock %}

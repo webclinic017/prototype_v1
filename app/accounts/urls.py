@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path, include
-from accounts.views import signup, AccountsEdit, LogIn, logout
+from accounts.views import AccountsEdit, logout, signup, loginUser
 from moneyes import settings
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),
 
-    path('login/', LogIn.as_view(), name="login"),
+    path('login/', loginUser, name="login"),
     path('logout/', logout, {"next_page": settings.LOGOUT_REDIRECT_URL}, name="account-logout"),
 
     path('signup/', signup, name="signup"),

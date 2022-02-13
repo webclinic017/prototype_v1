@@ -61,7 +61,9 @@ class Account(models.Model):
                 user=self.user,
             )
         ]
-        return sum(myholdings)
+        myBalance = sum(myholdings)
+        myBalance = round(myBalance, 2)
+        return myBalance
 
     class Meta:
         verbose_name = "Account"
@@ -109,11 +111,6 @@ class Currency(models.Model):
         quote = finnhub_client.quote(self.id)['c']
         return quote
 
-    @property
-    def stock_candles(self):
-        finnhub_client = finnhub.Client(api_key="sandbox_c1ksus237fktsl8cmv40")
-        stock_candles = finnhub_client.stock_candles({self.id}, 'D', 1590988249, 1591852249)
-        return stock_candles
 
     def __str__(self):
         return f"{self.name}"
@@ -141,7 +138,7 @@ class Holding(models.Model):
         default=datetime.now(),
         blank=True,
     )
-    type = models.OneToOneField(
+    type = models.ForeignKey(
         Type,
         on_delete=models.CASCADE,
     )
@@ -203,7 +200,7 @@ class Holding(models.Model):
     @property
     def gain_loss_holding(self):
         try:
-            percent = (self.currency.price - self.average_purchase_price) / self.average_purchase_price
+            percent = ((self.currency.updated_price - self.average_purchase_price) / self.average_purchase_price )* 100
             percent = round(percent, 2)
         except ZeroDivisionError:
             print(ZeroDivisionError)
