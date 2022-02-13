@@ -1,0 +1,17 @@
+{% extends 'gabarit.html' %}
+
+{% block title %}
+<title>Market Prices</title>
+{% endblock %}
+{% block body %}
+<h1>Market Prices</h1>
+{% for currency in currencies %}
+<div class="transaction-preview">
+    <div>
+        {{ currency.name }}
+        $ {{ currency.updated_price }}
+        {{ currency.type}}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

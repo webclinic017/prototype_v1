@@ -1,0 +1,33 @@
+{% extends 'gabarit.html' %}
+
+{% block title %}
+<title>Myes transactions</title>
+{% endblock %}
+{% block body %}
+<h1>
+    Transactions
+    <a href="{% url 'add-transaction' %}">
+    <i class="bi bi-plus"></i>
+</a>
+</h1>
+
+{% for transaction in transactions %}
+<div class="transaction-preview">
+    <div>
+        {{ transaction.date }}
+        {{ transaction.quantity }}
+        {{ transaction.currency }}
+        {{ transaction.price }}
+    </div>
+    <div>
+        <a href="{% url 'edit-transaction' pk=transaction.id %}" class="icon-edit-transaction">
+            <i class="bi bi-pencil"></i>
+        </a>
+        <a href="{% url 'delete-transaction' pk=transaction.id %}" class="icon-edit-transaction">
+            <i class="bi bi-trash"></i>
+        </a>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

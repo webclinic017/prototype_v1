@@ -1,13 +1,77 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Crypto, Portfolio, Transaction, Account, Balance
+from accounts.models import CustomUser
+from .models import Currency, Transaction, Account, Holding, Portfolio, Type
 
 
-@admin.register(Crypto)
-class CryptoAdmin(admin.ModelAdmin):
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
     list_display = (
-        "crypto_id",
+        "id",
+        "user",
+        "created",
+        "updated",
+        "balance",
+    )
+
+
+@admin.register(Currency)
+class CurrencyAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "crypto",
+        "name",
+        "created",
+        "updated",
+        "type",
+        "updated_price",
+    )
+
+
+@admin.register(Holding)
+class HoldingAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "currency",
+        "user",
+        "created",
+        "updated",
+        "quantity",
+        "value",
+        "average_purchase_price",
+        "gain_loss_holding"
+    )
+
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "date",
+        "quantity",
+        "user",
+        "currency",
+        "price",
+        "purchase_price",
+    )
+
+
+@admin.register(CustomUser)
+class UserAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "last_name",
+        "email",
+        "is_admin",
+        "is_staff",
+    )
+
+
+@admin.register(Type)
+class TypeAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
         "name",
     )
 
@@ -15,35 +79,8 @@ class CryptoAdmin(admin.ModelAdmin):
 @admin.register(Portfolio)
 class PortfolioAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
+        "type",
         "user",
-        "name",
-        "user",
-    )
-
-
-@admin.register(Account)
-class AccountAdmin(admin.ModelAdmin):
-    list_display = (
-        "acc_id",
-        "user",
-    )
-
-
-@admin.register(Balance)
-class BalanceAdmin(admin.ModelAdmin):
-    list_display = (
         "value",
-        "account"
-    )
-
-
-@admin.register(Transaction)
-class TransactionAdmin(admin.ModelAdmin):
-    list_display = (
-        "transaction_id",
-        "date",
-        "quantity",
-        "crypto",
-        "user",
-        "portfolio",
     )

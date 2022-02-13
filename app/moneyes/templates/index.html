@@ -6,6 +6,19 @@
 {% block body %}
         {% if user.is_authenticated %}
                 <h1>Hello {{user.get_username}}</h1>
+                <h2>Your account : $ {{ user.account.balance }}</h2>
+                <p>
+                        <a href="{% url 'add-transaction' %}">
+                                Add a transaction
+                                <i class="bi bi-plus"></i>
+                        </a>
+                </p>
+                <p>
+                        <a href="{% url 'list-transactions' %}">
+                                List transactions
+                                <i class="bi bi-list-nested"></i>
+                        </a>
+                </p>
         {% else %}
                 <h1>Welcome</h1>
         {% endif %}

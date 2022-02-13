@@ -1,0 +1,14 @@
+{% extends 'gabarit.html' %}
+
+{% block title %}
+<title>Portfolio</title>
+{% endblock %}
+{% block body %}
+<section class="mx-auto">
+    <h1>Detail transaction</h1>
+    <p>Date : {{object.date}}</p>
+    <p>Quantity : {{object.quantity}}</p>
+    <p>Currency : {{object.currency}}</p>
+    <p>Price : {{object.price}}</p>
+</section>
+{% endblock %}

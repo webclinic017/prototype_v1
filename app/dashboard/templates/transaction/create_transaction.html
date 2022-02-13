@@ -1,0 +1,17 @@
+{% extends 'gabarit.html' %}
+
+{% block title %}
+<title>Portfolio</title>
+{% endblock %}
+{% block body %}
+<h1>
+    Add a new transaction
+</h1>
+<section class="mx-auto">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Add this new transaction">
+    </form>
+</section>
+{% endblock %}
