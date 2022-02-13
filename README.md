@@ -1,6 +1,6 @@
 # The First Moneyes Prototype
 
-##Accounts
+## Accounts
 
 ### Admin account
 
@@ -12,11 +12,11 @@ password : RXEZ62vH7Ut9abS <br />
 username : user@normal.fr <br />
 password : RXEZ62vH7Ut9abS <br />
 ## Pages
-###Account
+### Account
 - [Log In](http://tomguastapaglia.pythonanywhere.com/accounts/login/) <br />
 - [Sign up](http://tomguastapaglia.pythonanywhere.com/accounts/signup/) <br />
 - [Change password](http://tomguastapaglia.pythonanywhere.com/accounts/password/) <br />
-###Application
+### Application
 - [Home](http://tomguastapaglia.pythonanywhere.com/) <br />
 - [Dashboard](http://tomguastapaglia.pythonanywhere.com/dashboard/) <br />
 - [Market Prices](http://tomguastapaglia.pythonanywhere.com/dashboard/currencies) <br />
