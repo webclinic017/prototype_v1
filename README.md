@@ -4,19 +4,29 @@
 username : user@admin.fr <br />
 password : RXEZ62vH7Ut9abS <br />
 ### User account
+> You can use this user to test Moneyes like a Demo. This user already have transactions, assets, etc.
+
 username : user@normal.fr <br />
 password : RXEZ62vH7Ut9abS <br />
 ## Pages
 ###Account
-- [Log In](http://localhost:8000/accounts/login/) <br />
-- [Sign up](http://localhost:8000/accounts/signup/) <br />
-- [Change password](http://localhost:8000/accounts/password/) <br />
+- [Log In](http://tomguastapaglia.pythonanywhere.com/accounts/login/) <br />
+- [Sign up](http://tomguastapaglia.pythonanywhere.com/accounts/signup/) <br />
+- [Change password](http://tomguastapaglia.pythonanywhere.com/accounts/password/) <br />
 ###Application
-- [Home](http://localhost:8000/) <br />
-- [Dashboard](http://localhost:8000/dashboard/) <br />
-- [Market Prices](http://localhost:8000/dashboard/currencies) <br />
-- [Wallets](http://localhost:8000/dashboard/wallets) <br />
+- [Home](http://tomguastapaglia.pythonanywhere.com/) <br />
+- [Dashboard](http://tomguastapaglia.pythonanywhere.com/dashboard/) <br />
+- [Market Prices](http://tomguastapaglia.pythonanywhere.com/dashboard/currencies) <br />
+- [Wallets](http://tomguastapaglia.pythonanywhere.com/dashboard/wallets) <br />
+- [Assets](http://tomguastapaglia.pythonanywhere.com/dashboard/assets) <br />
+- [Transactions](http://tomguastapaglia.pythonanywhere.com/dashboard/transactions) <br />
 
+You can add a new transaction here [Add new transaction](http://tomguastapaglia.pythonanywhere.com/dashboard/transaction/add). You can select :
+- Date
+- Quantity
+- Currency (only 4 available)
+- Purchase price
+After save it, new price is automatically get, and you can track your performance at 'home' page
 
 ## The project
 This project is given by Moneyes and this is the first version of Moneyes Application.
