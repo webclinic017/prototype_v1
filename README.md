@@ -26,7 +26,9 @@ password : RXEZ62vH7Ut9abS <br />
 - [Market Prices](http://tomguastapaglia.pythonanywhere.com/dashboard/currencies) <br />
 - [Wallets](http://tomguastapaglia.pythonanywhere.com/dashboard/wallets) <br />
 - [Assets](http://tomguastapaglia.pythonanywhere.com/dashboard/assets) <br />
-- [Transactions](http://tomguastapaglia.pythonanywhere.com/dashboard/transactions) <br />
+
+### You can edit your transactions (update & delete) here : 
+- [Transactions CRUD](http://tomguastapaglia.pythonanywhere.com/dashboard/transactions) <br />
 
 You can add a new transaction here [Add new transaction](http://tomguastapaglia.pythonanywhere.com/dashboard/transaction/add). You can select :
 - Date
